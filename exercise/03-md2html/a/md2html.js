@@ -1,29 +1,20 @@
 const {Menu, dialog} = require('electron').remote
 const fs = require('fs')
 const marked = require('marked')
-marked.setOptions({
-  renderer: new marked.Renderer(),
-  gfm: true,
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: false,
-  smartLists: true,
-  smartypants: false})
 
 const template = [
   {
     label: 'File',
     submenu: [
       {
-        label: 'New',
+        label: '新增檔案',
         accelerator: 'CmdOrCtrl+N',
         click: function () {
           var filePath = document.getElementById('filePath')
           var text = document.getElementById('text')
           var save = confirm('是否要存檔')
           if (save === true) {
-            dialog.showSaveDialog({filters: [ { name: 'any', extensions: ['*'] }, { name: 'text', extensions: ['txt'] } ]},
+            dialog.showSaveDialog({filters: [ { name: 'any', extensions: ['*'] }, { name: 'Markdown', extensions: ['md'] } ]},
             function (fileName) {
               fs.writeFile(fileName, text.value)
               text.value = ''
@@ -36,7 +27,7 @@ const template = [
         }
       },
       {
-        label: 'Open',
+        label: '開啟舊檔',
         accelerator: 'CmdOrCtrl+O',
         click: function () {
           dialog.showOpenDialog(
@@ -59,15 +50,17 @@ const template = [
         }
       },
       {
-        label: 'Save',
+        label: '存檔',
         accelerator: 'CmdOrCtrl+S',
         click: function () {
-          var fileName = document.getElementById('filePath').innerText
+          var filePath = document.getElementById('filePath')
+          var fileName = filePath.innerText
           var text = document.getElementById('text')
           if (fileName.trim().length === 0) {
-            dialog.showSaveDialog({filters: [ { name: 'any', extensions: ['*'] }, { name: 'text', extensions: ['txt'] } ]},
+            dialog.showSaveDialog({filters: [ { name: 'any', extensions: ['*'] }, { name: 'Markdown', extensions: ['md'] } ]},
             function (fileName) {
               fs.writeFile(fileName, text.value)
+              filePath.innerText = fileName
             })
           }
           fs.writeFile(fileName, text.value)
@@ -77,7 +70,7 @@ const template = [
         label: '另存新檔',
         accelerator: 'CmdOrCtrl+Shift+S',
         click: function () {
-          dialog.showSaveDialog({filters: [ { name: 'any', extensions: ['*'] }, { name: 'text', extensions: ['txt'] } ]},
+          dialog.showSaveDialog({filters: [ { name: 'any', extensions: ['*'] }, { name: 'Markdown', extensions: ['md'] } ]},
           function (fileName) {
             var text = document.getElementById('text')
             fs.writeFile(fileName, text.value)
@@ -125,7 +118,7 @@ const template = [
     submenu: [
       {
         label: 'md轉html',
-        accelerator: '',
+        accelerator: 'F5',
         click: function () {
           var text = document.getElementById('text')
           var ebox = document.getElementById('ebox')
@@ -133,6 +126,29 @@ const template = [
           console.log(ebox.innerHTML)
           text.style.width = '50%'
           ebox.style.width = '49%'
+        }
+      },
+      {
+        label: '下載html',
+        click: function () {
+          var ebox = document.getElementById('ebox')
+          if (ebox.innerHTML) {
+            dialog.showSaveDialog({filters: [ { name: 'html', extensions: ['html'] } ]},
+            function (fileName) {
+              var html = `<html><head></head><body>` + ebox.innerHTML + `</body></html>`
+              fs.writeFile(fileName, html)
+            })
+          }
+        }
+      },
+      {
+        label: '關閉右視窗',
+        click: function () {
+          var text = document.getElementById('text')
+          var ebox = document.getElementById('ebox')
+          ebox.innerHTML = null
+          ebox.style.width = '0%'
+          text.style.width = '100%'
         }
       }
     ]

@@ -52,12 +52,14 @@ const template = [
         label: 'Save',
         accelerator: 'CmdOrCtrl+S',
         click: function () {
-          var fileName = document.getElementById('filePath').innerText
+          var filePath = document.getElementById('filePath')
+          var fileName = filePath.innerText
           var text = document.getElementById('text')
           if (fileName.trim().length === 0) {
             dialog.showSaveDialog({filters: [ { name: 'any', extensions: ['*'] }, { name: 'text', extensions: ['txt'] } ]},
             function (fileName) {
               fs.writeFile(fileName, text.value)
+              filePath.innerText = fileName
             })
           }
           fs.writeFile(fileName, text.value)
