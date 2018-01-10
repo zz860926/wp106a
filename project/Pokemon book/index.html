@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>神奇寶貝圖鑑</title>
+        <style>
+        #Content{position: absolute;
+                width: 400px;
+                left:580px;
+                top:590px;}
+        #logo{
+            position: absolute;
+            margin-left: 380px;
+            top:170px;
+        }
+        input{padding:5px 15px; border:2px black solid;
+                cursor:pointer;
+                -webkit-border-radius: 5px;
+                border-radius: 5px; 
+                height:40px;}
+        </style>
+    </head>
+    <body>
+        <body background="image/many.png">
+        <div id="logo">
+            <img src="image/logo.png" width="700" >
+        </div>
+            <div id="Content">
+            <form  method="get" action="search.php?">
+                    寶可夢查詢：
+                    <input name="search" placeholder="請輸入寶可夢的名字。"></input>
+                    <button class="bottom" type="submit">查詢</button>
+            </form>
+         </div>
+
+    </body>
+</html>
